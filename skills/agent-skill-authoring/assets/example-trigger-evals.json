@@ -1,0 +1,82 @@
+[
+  {
+    "query": "Turn this recurring release-monitoring workflow into a reusable agent skill with validation steps.",
+    "should_trigger": true,
+    "reason": "The user explicitly asks to create a reusable agent skill."
+  },
+  {
+    "query": "We keep correcting agents on how to review NetSuite SuiteScript pull requests. Can you package the pattern as a skill?",
+    "should_trigger": true,
+    "reason": "A repeated correction pattern should be extracted into a skill."
+  },
+  {
+    "query": "Build a SKILL.md for our PDF form-filling workflow and include a scripts folder for deterministic validation.",
+    "should_trigger": true,
+    "reason": "The task is authoring a compliant SKILL.md and support structure."
+  },
+  {
+    "query": "Can you check whether this skill description is too broad and suggest trigger evals?",
+    "should_trigger": true,
+    "reason": "Description optimization and trigger testing are part of skill authoring."
+  },
+  {
+    "query": "I pasted a runbook. Extract the reusable agent behavior into agentskills.io format.",
+    "should_trigger": true,
+    "reason": "The user wants a runbook converted into an Agent Skill."
+  },
+  {
+    "query": "Make a new skill called data-quality-review and include references and assets directories.",
+    "should_trigger": true,
+    "reason": "The user requests skill scaffolding."
+  },
+  {
+    "query": "Review this SKILL.md for frontmatter compliance and progressive disclosure issues.",
+    "should_trigger": true,
+    "reason": "The task is reviewing an Agent Skill."
+  },
+  {
+    "query": "Package the lessons from this successful workflow so other AI agents can reuse it.",
+    "should_trigger": true,
+    "reason": "Implicit request to create a reusable skill from workflow lessons."
+  },
+  {
+    "query": "Write a Python script that checks whether directories contain SKILL.md files.",
+    "should_trigger": false,
+    "reason": "This is generic scripting unless tied to authoring/reviewing an Agent Skill."
+  },
+  {
+    "query": "Summarize the agentskills.io homepage for me.",
+    "should_trigger": false,
+    "reason": "This is information retrieval, not skill authoring."
+  },
+  {
+    "query": "Add a README to this repository explaining what our utilities do.",
+    "should_trigger": false,
+    "reason": "Repository documentation alone is not necessarily Agent Skill authoring."
+  },
+  {
+    "query": "Make a GitHub Action that runs our validator on pull requests.",
+    "should_trigger": false,
+    "reason": "CI configuration may support the repo but is not directly creating/reviewing a skill."
+  },
+  {
+    "query": "Refactor this shell command into a safer Python CLI with --dry-run.",
+    "should_trigger": false,
+    "reason": "Generic CLI safety work unless the script is bundled in a skill."
+  },
+  {
+    "query": "Review this Markdown file for grammar and heading hierarchy.",
+    "should_trigger": false,
+    "reason": "General Markdown editing is outside the skill-authoring boundary."
+  },
+  {
+    "query": "Create a reusable prompt for code reviews.",
+    "should_trigger": false,
+    "reason": "A reusable prompt is adjacent, but it is not necessarily an Agent Skill unless the user asks for agentskills.io structure."
+  },
+  {
+    "query": "Explain how YAML frontmatter works.",
+    "should_trigger": false,
+    "reason": "General YAML explanation does not require the full Agent Skill authoring workflow."
+  }
+]
