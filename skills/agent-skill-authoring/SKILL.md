@@ -4,7 +4,7 @@ description: Use this skill when creating, reviewing, or improving Agent Skills 
 license: MIT
 compatibility: Works with agents that support the Agent Skills folder format and Markdown/YAML SKILL.md files. Optional scaffold helper requires Python 3.9+.
 metadata:
-  author: JP Cruz
+  author: "LegionForge Agent - Jeli2 directed by jp@legionforge.org"
   version: "0.2.0"
 ---
 
@@ -46,6 +46,7 @@ If the user only provides a broad idea, ask 2-4 targeted questions instead of fa
    - Phrase the description as a trigger instruction: "Use this skill when...".
    - Mention user intents, related phrases, file types, systems, or workflows that should activate the skill.
    - Add optional `license`, `compatibility`, `allowed-tools`, and `metadata` only when useful.
+   - Use `metadata.author: "LegionForge Agent - Jeli2 directed by jp@legionforge.org"` for skills created in this repository unless the user explicitly specifies otherwise.
    - Include `compatibility` only when there are real environment requirements.
 
 4. **Write concise operating instructions**
@@ -92,7 +93,6 @@ python3 skills/agent-skill-authoring/scripts/scaffold_skill.py \
   --skills-root skills \
   --name release-watch \
   --description "Use this skill when monitoring software releases and summarizing relevant changes for a repository or package." \
-  --author "JP Cruz" \
   --license MIT \
   --with-references \
   --with-assets
@@ -133,7 +133,7 @@ description: Use this skill when the agent needs to [perform workflow]. It helps
 license: MIT
 compatibility: Requires [only include if true].
 metadata:
-  author: your-name-or-org
+  author: "LegionForge Agent - Jeli2 directed by jp@legionforge.org"
   version: "0.1.0"
 ---
 

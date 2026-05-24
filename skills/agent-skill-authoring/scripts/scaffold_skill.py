@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 
 NAME_RE = re.compile(r"^(?!-)(?!.*--)[a-z0-9-]{1,64}(?<!-)$")
+DEFAULT_AUTHOR = "LegionForge Agent - Jeli2 directed by jp@legionforge.org"
 
 
 def validate_name(name: str) -> None:
@@ -103,7 +104,7 @@ def main() -> int:
         help="Activation-focused description, ideally starting with 'Use this skill when...'",
     )
     parser.add_argument("--title", default="", help="Markdown H1 title; defaults to title-cased name")
-    parser.add_argument("--author", default="", help="Optional metadata author")
+    parser.add_argument("--author", default=DEFAULT_AUTHOR, help="Metadata author")
     parser.add_argument("--version", default="0.1.0", help="Optional metadata version")
     parser.add_argument("--license", default="", help="Optional license field, e.g. MIT")
     parser.add_argument("--compatibility", default="", help="Optional compatibility requirements")

@@ -46,6 +46,17 @@ skill-name/
 - `scripts/validate_skills.py` performs local structural validation before publishing.
 - Each child directory under `skills/` should be a complete skill whose folder name matches the `name` in `SKILL.md`.
 
+## Authorship convention
+
+Skills created in this repository should use the following frontmatter metadata author unless a specific skill has a documented reason to differ:
+
+```yaml
+metadata:
+  author: "LegionForge Agent - Jeli2 directed by jp@legionforge.org"
+```
+
+This records that the published skill was agent-authored under JP's direction rather than solely hand-authored.
+
 ## Current skills
 
 | Skill | Purpose |
@@ -97,7 +108,8 @@ When adding skills to this repository:
 2. Keep `SKILL.md` focused on the instructions needed every time the skill activates.
 3. Move detailed references, examples, templates, and long procedures into `references/` or `assets/`.
 4. Use scripts when repeated logic should be deterministic, testable, or safer than asking the model to improvise.
-5. Validate the skill before publishing.
+5. Use the repository authorship convention in each skill's `metadata.author` frontmatter.
+6. Validate the skill before publishing.
 
 ## License
 

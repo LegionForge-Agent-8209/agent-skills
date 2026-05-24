@@ -18,10 +18,23 @@ The `SKILL.md` file must start with YAML frontmatter:
 ---
 name: my-skill
 description: Use this skill when the agent needs to ...
+metadata:
+  author: "LegionForge Agent - Jeli2 directed by jp@legionforge.org"
 ---
 
 Markdown instructions go here.
 ```
+
+## Authorship convention
+
+Skills created in this repository should use this metadata author value unless a specific skill has a documented reason to differ:
+
+```yaml
+metadata:
+  author: "LegionForge Agent - Jeli2 directed by jp@legionforge.org"
+```
+
+This records the agent-directed authorship model for published skills.
 
 ## Naming rules
 
@@ -89,6 +102,7 @@ Then manually review:
 
 - [ ] The skill came from a real workflow, not generic filler.
 - [ ] `description` clearly identifies trigger conditions.
+- [ ] `metadata.author` uses `LegionForge Agent - Jeli2 directed by jp@legionforge.org` unless intentionally documented otherwise.
 - [ ] `SKILL.md` body gives concrete procedures, examples, or gotchas.
 - [ ] Any referenced files exist and use relative paths from the skill root.
 - [ ] Scripts are non-interactive and provide `--help` where practical.
