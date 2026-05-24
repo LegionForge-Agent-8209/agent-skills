@@ -1,0 +1,106 @@
+# Agent Skills
+
+A public collection of reusable [Agent Skills](https://agentskills.io/) for AI agents.
+
+This repository is intended to publish practical skills and utilities we use in real workflows so others can copy, adapt, and improve them.
+
+## What is an Agent Skill?
+
+An Agent Skill is a lightweight folder-based package that teaches an AI agent a reusable capability, workflow, or domain-specific procedure.
+
+At minimum, each skill is a directory containing a `SKILL.md` file with YAML frontmatter and Markdown instructions:
+
+```text
+skill-name/
+└── SKILL.md
+```
+
+Skills can also include optional support files:
+
+```text
+skill-name/
+├── SKILL.md      # Required: metadata + instructions
+├── scripts/      # Optional: executable helpers
+├── references/   # Optional: deeper documentation loaded on demand
+├── assets/       # Optional: templates, examples, schemas, images, etc.
+└── ...
+```
+
+## Repository layout
+
+```text
+.
+├── README.md
+├── CONTRIBUTING.md
+├── LICENSE
+├── scripts/
+│   └── validate_skills.py
+└── skills/
+    └── agent-skill-authoring/
+        ├── SKILL.md
+        └── references/
+            └── authoring-checklist.md
+```
+
+- `skills/` contains publishable Agent Skills.
+- `scripts/validate_skills.py` performs local structural validation before publishing.
+- Each child directory under `skills/` should be a complete skill whose folder name matches the `name` in `SKILL.md`.
+
+## Current skills
+
+| Skill | Purpose |
+| --- | --- |
+| [`agent-skill-authoring`](skills/agent-skill-authoring/SKILL.md) | Helps agents draft, review, and validate Agent Skills that follow the agentskills.io specification. |
+
+## Validating skills
+
+Run the local validator:
+
+```bash
+python3 scripts/validate_skills.py skills
+```
+
+The validator checks the core published specification rules:
+
+- each skill directory contains `SKILL.md`
+- `SKILL.md` has YAML frontmatter
+- required `name` and `description` fields exist
+- `name` matches the parent directory
+- `name` uses lowercase letters, numbers, and hyphens only
+- `description` is non-empty and no more than 1024 characters
+- optional `compatibility` is no more than 500 characters
+
+For full compatibility testing, also validate with the official reference tooling when available:
+
+```bash
+skills-ref validate ./skills/agent-skill-authoring
+```
+
+## Installing a skill in a compatible client
+
+Agent Skills are portable folders. Depending on your client, you can usually copy a skill folder into the client's skills directory.
+
+For example, VS Code looks for project skills under `.agents/skills/`:
+
+```bash
+mkdir -p .agents/skills
+cp -R skills/agent-skill-authoring .agents/skills/
+```
+
+Then restart or refresh the agent session and confirm the skill appears in the client's skills list.
+
+## Authoring principles
+
+When adding skills to this repository:
+
+1. Start from real workflow experience, runbooks, scripts, or repeated agent corrections.
+2. Keep `SKILL.md` focused on the instructions needed every time the skill activates.
+3. Move detailed references, examples, templates, and long procedures into `references/` or `assets/`.
+4. Use scripts when repeated logic should be deterministic, testable, or safer than asking the model to improvise.
+5. Validate the skill before publishing.
+
+## License
+
+This repository is licensed under the MIT License. See [`LICENSE`](LICENSE).
+
+Individual skills may include their own `license` frontmatter if a different license applies to that skill.
