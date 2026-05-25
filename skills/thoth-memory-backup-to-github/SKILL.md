@@ -5,7 +5,7 @@ license: MIT
 compatibility: Designed for standard Thoth installations where durable data lives under ~/.thoth or THOTH_DATA_DIR. Requires user-approved shell/Git operations and a private GitHub repository. Encryption tooling may vary by platform.
 metadata:
   author: "LegionForge Agent - Jeli2 directed by jp@legionforge.org"
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Thoth memory backup to GitHub
@@ -13,6 +13,102 @@ metadata:
 Use this skill to help a Thoth user build a safe, general-purpose backup workflow for Thoth memory and local state using a **private GitHub repository**. Prefer encrypted archives, explicit restore validation, and documented retention over raw plaintext syncs.
 
 This skill generalizes lessons from real Thoth backup workflows, but it must not assume any private instance labels, repository names, SSH aliases, host paths, passphrase files, schedules, or operational scripts.
+
+## Setup questionnaire
+
+Run this questionnaire before designing or implementing the backup workflow. Ask the user to answer what they can, and explicitly mark unknowns rather than guessing. If the user only wants a high-level plan, collect the questionnaire in prose. If the user wants implementation help, use the answers to choose a safe backup scope, encryption approach, GitHub workflow, and restore-validation path.
+
+### 1. Thoth age, size, and memory audit
+
+1. How long have you been running this Thoth instance?
+2. Roughly how heavily have you used memory? For example, do you expect more than 100 memories/entities, large documents, or long conversation history?
+3. Can Thoth run a memory audit/status check and share the non-secret output here? Useful audit output includes:
+   - memory/entity count
+   - relation count
+   - memory database path and size
+   - memory vector directory path and size
+   - wiki vault enabled/path/status, if relevant
+   - recent memory/dream-cycle errors, if any
+4. If an audit cannot be run, ask the user to say why: no tool access, remote system, permission issue, Thoth unavailable, or unknown.
+
+### 2. Installation and data directory
+
+1. What operating system and installation style are you using: Windows installer, macOS app, Linux installer, source checkout, Docker/container, or other?
+2. Is `THOTH_DATA_DIR` set? If yes, what path does it point to?
+3. If `THOTH_DATA_DIR` is not set, should the workflow assume the standard data directory such as `~/.thoth`?
+4. Is Thoth running continuously while backups will run, or can it be stopped during backup windows?
+5. Is the backup being run from inside the same machine/container where Thoth stores its data?
+
+### 3. Memory-system modifications and compatibility risks
+
+Ask whether the user has modified Thoth in ways that could make a standard memory backup risky. Examples:
+
+1. Have you altered the memory system programmatically?
+2. Have you edited Thoth files related to memory, knowledge graph, embeddings, wiki export, dream cycle, document extraction, or conversation storage?
+3. Have you moved memory storage to another database, vector store, external service, symlinked directory, mounted volume, or custom architecture?
+4. Have you changed `memory.py`, `knowledge_graph.py`, `documents.py`, `wiki_vault.py`, embedding configuration, or related storage modules?
+5. Are there multiple Thoth instances sharing one data directory or one GitHub backup repository?
+6. Are there custom plugins, Custom Tools, MCP servers, or scripts that write directly to memory files?
+
+If the answer to any compatibility question is yes or unknown, pause implementation and first produce a risk assessment plus a custom inventory plan.
+
+### 4. GitHub readiness
+
+This skill assumes the user is comfortable enough with GitHub to maintain a **private** backup repository. If not, walk the user through the missing prerequisites before implementing backup scripts. Ask:
+
+1. Do you already have a GitHub account?
+2. Do you already have a private repository for Thoth backups?
+3. Do you want the assistant/agent to help create or initialize the repository?
+4. Which Git authentication method should be used: SSH key, HTTPS token/credential helper, GitHub CLI, or another method?
+5. If using an agent or bot identity, has it been granted access only to the backup repository?
+6. Are you comfortable with Git basics such as clone, commit, push, remote, and branch?
+7. Should the skill include a beginner path for account creation, private repo creation, SSH/HTTPS setup, and first push validation?
+
+Never proceed as if a repository is private unless the user confirms it or tooling verifies it.
+
+### 5. Backup timing and automation preference
+
+1. Should this backup run on demand, on a schedule, or both?
+2. If scheduled, what frequency is appropriate: daily, weekly, before upgrades, after large memory imports, or another cadence?
+3. Should scheduled backups run only when Thoth is idle?
+4. Should failures notify the user through desktop, Discord/Telegram/Slack, email, or another channel?
+5. Should the workflow require approval before each push, or should a fully unattended encrypted backup be allowed after setup?
+
+### 6. Encryption preference and risk acknowledgement
+
+1. This skill strongly recommends encrypted backups before Git. Are encrypted backups acceptable?
+2. Which encryption method do you prefer or already use: `age`, `gpg`, OpenSSL, encrypted zip/7z, platform vault tooling, or another method?
+3. How will the key/passphrase be stored for manual use?
+4. If unattended scheduled backups are desired, where will the automation read the key/passphrase from, and what file permissions or OS secret store will protect it?
+5. How will you recover the key/passphrase if the original machine is lost?
+6. If the user prefers plain archives, stop and explain that plaintext Thoth backups may expose private memories, documents, conversations, provider metadata, and operational details. Continue only after explicit acknowledgement and preferably restrict plaintext to a local-only test, not GitHub.
+
+### 7. Backup scope and exclusions
+
+1. Is the goal memory-only backup or broader Thoth continuity backup?
+2. Should the backup include documents/uploads, wiki vault, workflows/tasks, conversations, settings, plugins, Custom Tools, or channel configuration metadata?
+3. Should logs be excluded, included for troubleshooting, or retained only locally?
+4. Should browser profiles, OAuth/session data, API keys, provider tokens, SSH keys, and other runnable secrets be excluded? Default to exclude.
+5. Are local model files or caches present, and should they be excluded to keep GitHub backup size reasonable?
+6. Are there files too sensitive even for encrypted GitHub storage?
+
+### 8. Restore expectations
+
+1. What does success mean: recover only memories, recover Thoth continuity, migrate to a new machine, or clone a standard setup for future agents?
+2. Should restore validation be a dry restore into a temporary folder, never overwriting the live Thoth directory?
+3. How often should restore drills be performed?
+4. Who is expected to perform restores: the user, a future agent, or both?
+5. What documentation should be generated for a human to recover the backup without this exact chat context?
+
+### 9. Retention, size, and governance
+
+1. How many backup versions should remain locally?
+2. How many backup versions should remain in GitHub history?
+3. Are there GitHub file-size concerns requiring split archives or Git LFS?
+4. Should old backup artifacts be pruned automatically only after a successful push and restore validation?
+5. Are there legal, employer, customer, family, or personal privacy constraints on storing this data in GitHub, even encrypted?
+
+After the questionnaire, summarize the answers as **Assumptions**, **Risks**, **Decisions needed**, and **Recommended next step** before creating scripts or running backup commands.
 
 ## Core principles
 
