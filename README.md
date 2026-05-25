@@ -36,10 +36,15 @@ skill-name/
 ├── scripts/
 │   └── validate_skills.py
 └── skills/
-    └── agent-skill-authoring/
+    ├── agent-skill-authoring/
+    │   ├── SKILL.md
+    │   ├── assets/
+    │   ├── references/
+    │   └── scripts/
+    └── thoth-memory-backup-to-github/
         ├── SKILL.md
+        ├── assets/
         └── references/
-            └── authoring-checklist.md
 ```
 
 - `skills/` contains publishable Agent Skills.
@@ -62,6 +67,7 @@ This records that the published skill was agent-authored under JP's direction ra
 | Skill | Purpose |
 | --- | --- |
 | [`agent-skill-authoring`](skills/agent-skill-authoring/SKILL.md) | Helps agents draft, review, and validate Agent Skills that follow the agentskills.io specification. |
+| [`thoth-memory-backup-to-github`](skills/thoth-memory-backup-to-github/SKILL.md) | Helps design, review, and validate encrypted Thoth memory/local-state backups to a user's private GitHub repository. |
 
 ## Validating skills
 
@@ -85,6 +91,7 @@ For full compatibility testing, also validate with the official reference toolin
 
 ```bash
 skills-ref validate ./skills/agent-skill-authoring
+skills-ref validate ./skills/thoth-memory-backup-to-github
 ```
 
 ## Installing a skill in a compatible client
@@ -96,6 +103,7 @@ For example, VS Code looks for project skills under `.agents/skills/`:
 ```bash
 mkdir -p .agents/skills
 cp -R skills/agent-skill-authoring .agents/skills/
+cp -R skills/thoth-memory-backup-to-github .agents/skills/
 ```
 
 Then restart or refresh the agent session and confirm the skill appears in the client's skills list.

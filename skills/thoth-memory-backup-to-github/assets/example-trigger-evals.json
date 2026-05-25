@@ -1,0 +1,82 @@
+[
+  {
+    "query": "Help me back up my Thoth memory to a private GitHub repository safely.",
+    "should_trigger": true,
+    "reason": "Direct request for Thoth memory backup to private GitHub."
+  },
+  {
+    "query": "Create a standard workflow for encrypted Thoth backups that I can reuse on new agents.",
+    "should_trigger": true,
+    "reason": "The user wants a reusable Thoth backup workflow."
+  },
+  {
+    "query": "Review my script that archives ~/.thoth and pushes it to GitHub.",
+    "should_trigger": true,
+    "reason": "Reviewing a Thoth state backup script is in scope."
+  },
+  {
+    "query": "Which Thoth files should I include if I only care about memory and the knowledge graph?",
+    "should_trigger": true,
+    "reason": "The task asks about Thoth memory backup scope."
+  },
+  {
+    "query": "Set up a restore drill for my latest encrypted Thoth backup archive.",
+    "should_trigger": true,
+    "reason": "Restore validation is part of the backup workflow."
+  },
+  {
+    "query": "Generalize our private Thoth backup process for normal Thoth users without private details.",
+    "should_trigger": true,
+    "reason": "The user explicitly asks to generalize a Thoth backup workflow."
+  },
+  {
+    "query": "My Thoth backup repo has raw memory.db staged. Is that safe?",
+    "should_trigger": true,
+    "reason": "The request needs Thoth backup privacy and Git safety review."
+  },
+  {
+    "query": "Make a backup plan for THOTH_DATA_DIR before I reinstall Thoth.",
+    "should_trigger": true,
+    "reason": "Backup planning for Thoth data directory is in scope."
+  },
+  {
+    "query": "Explain how GitHub private repositories work.",
+    "should_trigger": false,
+    "reason": "Generic GitHub explanation is not Thoth backup work."
+  },
+  {
+    "query": "Back up my photos folder to GitHub.",
+    "should_trigger": false,
+    "reason": "General file backup is outside Thoth memory backup scope."
+  },
+  {
+    "query": "Search the Thoth README for model installation steps.",
+    "should_trigger": false,
+    "reason": "General Thoth documentation lookup is not backup design."
+  },
+  {
+    "query": "Create a GitHub Actions workflow for my Python project.",
+    "should_trigger": false,
+    "reason": "Generic CI work is outside scope."
+  },
+  {
+    "query": "Export this conversation to the wiki vault.",
+    "should_trigger": false,
+    "reason": "Wiki export is not a GitHub backup workflow."
+  },
+  {
+    "query": "How do I use SQLite backup API in Python?",
+    "should_trigger": false,
+    "reason": "Generic SQLite backup help should not trigger unless tied to Thoth state."
+  },
+  {
+    "query": "Can you install GitHub CLI?",
+    "should_trigger": false,
+    "reason": "GitHub CLI setup alone is not a Thoth backup workflow."
+  },
+  {
+    "query": "Move my local model files to another disk.",
+    "should_trigger": false,
+    "reason": "Local model file management is not memory backup to GitHub."
+  }
+]
