@@ -62,6 +62,32 @@ metadata:
 
 This records that the published skill was agent-authored under JP's direction rather than solely hand-authored.
 
+## Provenance and quality process
+
+Skills in this repository may be drafted, reviewed, or revised by Jeli2, a Thoth-based AI assistant directed by JP Cruz. Published skills are intended to come from real workflows, repeated agent corrections, or operational runbooks rather than generic prompt templates.
+
+Before publication, skills should be reviewed for:
+
+- structural compatibility with the Agent Skills folder format
+- trigger-description precision and near-miss behavior
+- safety, privacy, and licensing risks
+- existence and usefulness of referenced support files
+- removal or generalization of private instance details
+- local validation and tests
+
+Pull requests and pushes to `master` run GitHub Actions validation for skill structure, unit tests, and trigger-eval JSON syntax. Security workflows also run dev-rig-backed gitleaks secret scanning plus Python/script SAST on pushes, pull requests, a weekly schedule, and manual dispatch.
+
+## CI/CD and security posture
+
+This repository follows LegionForge dev-rig principles proportionally for a Markdown + small-Python Agent Skills registry:
+
+- `validate.yml` runs skill structure validation, unit tests, and trigger-eval JSON parsing.
+- `security.yml` uses `LegionForge/dev-rig` reusable workflows for gitleaks secret scanning and Python/script SAST.
+- `.pre-commit-config.yaml` provides local hygiene, JSON/YAML checks, ruff, bandit, and gitleaks hooks.
+- `SECURITY.md` documents vulnerability reporting and the current security controls.
+
+The shared dev-rig dependency-audit and SBOM workflows assume an installable Python package. This repo currently has no packaged runtime dependencies, so those workflows are deferred until a `pyproject.toml` or third-party dependency surface is introduced.
+
 ## Current skills
 
 | Skill | Purpose |

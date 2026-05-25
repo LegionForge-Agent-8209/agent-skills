@@ -5,7 +5,7 @@ license: MIT
 compatibility: Designed for standard Thoth installations where durable data lives under ~/.thoth or THOTH_DATA_DIR. Requires user-approved shell/Git operations and a private GitHub repository. Encryption tooling may vary by platform.
 metadata:
   author: "LegionForge Agent - Jeli2 directed by jp@legionforge.org"
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # Thoth memory backup to GitHub
@@ -14,14 +14,106 @@ Use this skill to help a Thoth user build a safe, general-purpose backup workflo
 
 This skill generalizes lessons from real Thoth backup workflows, but it must not assume any private instance labels, repository names, SSH aliases, host paths, passphrase files, schedules, or operational scripts.
 
-## Setup questionnaire
+## Minimum viable preflight
+
+Do not dump the full questionnaire on the user unless they ask for a planning worksheet. Start with the smallest safe question set, then ask follow-ups only where the answers reveal risk or missing prerequisites.
+
+Ask these first:
+
+1. What Thoth data directory should be backed up? Default to `$THOTH_DATA_DIR` when set, otherwise `~/.thoth`.
+2. Is the goal **memory-only backup**, broader **Thoth continuity backup**, or a full/private forensic snapshot?
+3. Have you modified Thoth's memory, knowledge graph, embeddings, wiki export, document extraction, or storage architecture?
+4. Do you already have a GitHub repository for this backup, and is it private?
+5. Are encrypted backups acceptable before anything is committed to GitHub?
+6. Should backups run on demand, on a schedule, or both?
+7. Can we perform a dry restore validation into a temporary directory before considering the workflow successful?
+
+After these answers, summarize **Assumptions**, **Risks**, **Decisions needed**, and **Recommended next step**. Use the detailed questionnaire below for any unknowns or high-risk answers.
+
+## Decision flow
+
+Use this flow before writing scripts or running backup commands:
+
+1. **If the user has modified memory/storage internals** — pause implementation. Produce a custom inventory plan and risk assessment before assuming standard `memory.db` / `memory_vectors/` behavior.
+2. **If the GitHub repository is missing or not confirmed private** — stop before push-related work. Help create or verify a private repository first.
+3. **If encryption is accepted** — choose an encryption method, key/passphrase recovery plan, and unattended-key handling if scheduling is requested.
+4. **If encryption is declined** — warn that plaintext archives can expose memories, conversations, documents, provider metadata, and operational details. Default to a local-only plaintext test. Do not push plaintext to GitHub unless the user explicitly overrides the warning in writing.
+5. **If Thoth is running during backup** — use SQLite online backup APIs for databases or stop Thoth during the snapshot window.
+6. **If scheduling is requested** — require one successful manual backup plus dry restore validation before enabling unattended runs.
+7. **If the user asks for a full/private forensic snapshot** — enumerate extra privacy risks and require explicit consent for each high-risk category, especially logs, browser/session data, tokens, and secrets.
+
+## Backup profiles
+
+Use one of these profiles to keep the scope explicit:
+
+### Memory-only backup
+
+Use when the user mainly wants to preserve Thoth memories and knowledge graph continuity.
+
+Usually include:
+
+- `memory.db`
+- `memory_vectors/`
+- non-secret memory manifests or audit metadata
+- wiki vault exports only if the user treats them as part of memory recovery
+
+Usually exclude conversations, documents/uploads, logs, browser/session state, credentials, caches, and local model files unless the user explicitly expands scope.
+
+### Thoth continuity backup
+
+Use when the user wants a new machine or future agent to recover more of the working Thoth environment.
+
+May include, after privacy review:
+
+- memory-only profile contents
+- conversations / threads
+- workflows / tasks
+- documents / uploads
+- wiki vault
+- settings metadata
+- plugin or Custom Tool metadata
+- non-secret channel configuration metadata
+
+Still exclude runnable secrets by default: API keys, provider tokens, OAuth/session tokens, SSH keys, browser profiles, and credential-store contents.
+
+### Full/private forensic snapshot
+
+Use only when the user explicitly asks for maximum recoverability or incident-style preservation. This profile may be large, sensitive, and hard to sanitize.
+
+Before proceeding, identify every sensitive category, explain why it is risky, and get explicit consent. Prefer encryption, local-only staging, and restore drills. Do not treat this profile as the default public skill behavior.
+
+## Memory audit output format
+
+When tools permit, perform a non-secret audit before implementation. Do not print raw memories, conversation contents, documents, API keys, OAuth tokens, browser/session data, or secret values.
+
+Prefer this output shape:
+
+```markdown
+## Thoth memory audit
+- Data directory:
+- `THOTH_DATA_DIR` set: yes / no / unknown
+- `memory.db` exists: yes / no / unknown
+- `memory.db` size:
+- Entity/memory count:
+- Relation count:
+- `memory_vectors/` exists: yes / no / unknown
+- `memory_vectors/` size:
+- Wiki vault enabled/path/status:
+- Recent memory/dream-cycle errors:
+- Custom memory/storage modifications:
+- Audit limitations:
+```
+
+Use `thoth_status` memory/config/log categories when available, or safe filesystem/database inspection when the user approves it. If no audit tool access exists, ask the user to provide non-secret counts, paths, and size estimates.
+
+## Detailed setup questionnaire
 
 Run this questionnaire before designing or implementing the backup workflow. Ask the user to answer what they can, and explicitly mark unknowns rather than guessing. If the user only wants a high-level plan, collect the questionnaire in prose. If the user wants implementation help, use the answers to choose a safe backup scope, encryption approach, GitHub workflow, and restore-validation path.
 
 ### 1. Thoth age, size, and memory audit
 
 1. How long have you been running this Thoth instance?
-2. Roughly how heavily have you used memory? For example, do you expect more than 100 memories/entities, large documents, or long conversation history?
+2. Roughly how heavily have you used memory? For example, do you expect a non-trivial graph such as more than 100 memories/entities, many relations, large documents, or long conversation history?
 3. Can Thoth run a memory audit/status check and share the non-secret output here? Useful audit output includes:
    - memory/entity count
    - relation count
@@ -120,18 +212,18 @@ After the questionnaire, summarize the answers as **Assumptions**, **Risks**, **
 6. **Validate every backup path with a dry restore** — a backup workflow is incomplete until the user can inspect or restore the newest archive in a temporary directory.
 7. **Document assumptions** — record data directory, repo URL, encryption method, retention policy, restore test date, and known exclusions.
 
-## Intake questions
+## Just-in-time follow-up questions
 
-Ask only the questions needed for the current step:
+Ask only the questions needed for the current step. Use these to fill gaps after the minimum preflight rather than repeating the entire detailed questionnaire:
 
-1. What Thoth data directory should be backed up? Default to `$THOTH_DATA_DIR` when set, otherwise `~/.thoth`.
-2. Is the GitHub repository already created, and is it private?
-3. Should backups use SSH or HTTPS authentication?
-4. Which encryption tool is available or preferred: `age`, `gpg`, OpenSSL, encrypted zip/7z, or another tool?
-5. Where should the encryption passphrase/key live, and how will the user recover it if the machine is lost?
-6. Should the backup include only memory/knowledge data or broader Thoth state such as workflows, documents, wiki vault, plugins, and settings?
-7. What should be excluded: logs, browser profile, caches, provider metadata, channel data, documents, local model files, or secrets?
-8. What retention policy should GitHub and local disk use?
+1. Should backups use SSH, HTTPS, GitHub CLI, or an existing credential helper?
+2. Which encryption tool is available or preferred: `age`, `gpg`, OpenSSL, encrypted zip/7z, or another tool?
+3. Where should the encryption passphrase/key live, and how will the user recover it if the machine is lost?
+4. Which backup profile should be used: memory-only, Thoth continuity, or full/private forensic snapshot?
+5. Which optional data categories should be included: conversations, workflows/tasks, documents/uploads, wiki vault, plugins, Custom Tools, settings, or non-secret channel metadata?
+6. What should be excluded: logs, browser profile, caches, provider metadata, channel data, documents, local model files, or secrets?
+7. What retention policy should GitHub and local disk use?
+8. What notification or approval behavior should automation use?
 
 ## Workflow
 

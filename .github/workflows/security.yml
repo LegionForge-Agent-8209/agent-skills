@@ -1,0 +1,28 @@
+name: Security
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: '23 8 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  secrets:
+    name: Secret scanning
+    uses: LegionForge/dev-rig/.github/workflows/secrets.yml@main
+
+  sast:
+    name: Python/script SAST
+    uses: LegionForge/dev-rig/.github/workflows/sast.yml@main
+    with:
+      source-dirs: "scripts skills/agent-skill-authoring/scripts"
+      semgrep-configs: "p/python"
+    permissions:
+      contents: read
+      security-events: write

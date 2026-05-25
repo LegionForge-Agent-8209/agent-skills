@@ -96,7 +96,19 @@ Before opening a pull request or publishing a skill:
 
 ```bash
 python3 scripts/validate_skills.py skills
+python3 -m unittest discover -s tests
 ```
+
+GitHub Actions runs these checks on pushes and pull requests to `master`, along with JSON syntax validation for trigger-eval assets. Security workflows also run dev-rig-backed gitleaks secret scanning and Python/script SAST.
+
+For local QC, install pre-commit when available:
+
+```bash
+pre-commit install
+pre-commit run --all-files
+```
+
+The local pre-commit configuration is adapted from LegionForge dev-rig for this repository's Markdown, JSON, YAML, and small Python-script surface.
 
 Then manually review:
 
@@ -105,6 +117,8 @@ Then manually review:
 - [ ] `metadata.author` uses `LegionForge Agent - Jeli2 directed by jp@legionforge.org` unless intentionally documented otherwise.
 - [ ] `SKILL.md` body gives concrete procedures, examples, or gotchas.
 - [ ] Any referenced files exist and use relative paths from the skill root.
+- [ ] Referenced files are substantive, not empty placeholders or stubs.
+- [ ] Source notes identify when external assumptions should be re-checked.
 - [ ] Scripts are non-interactive and provide `--help` where practical.
 - [ ] Destructive scripts have dry-run or explicit confirmation safeguards.
 - [ ] Licensing is clear before publishing.

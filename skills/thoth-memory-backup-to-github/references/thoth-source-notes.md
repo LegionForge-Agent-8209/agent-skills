@@ -82,3 +82,7 @@ Do not hard-code paths from a single deployment. Always resolve:
 Do not assume Docker unless the user says Thoth is running in Docker.
 
 Do not assume specific repository names, SSH aliases, passphrase paths, backup filenames, or retention settings.
+
+## Maintenance note
+
+Re-check these assumptions against the official Thoth repository before major Thoth version changes, installer/storage changes, or backup-script revisions. In particular, verify the active data-directory resolution, memory database path, vector index path, SQLite journaling mode, wiki/document storage locations, and secret-storage behavior before publishing deterministic backup scripts.

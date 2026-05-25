@@ -40,6 +40,36 @@
     "reason": "Backup planning for Thoth data directory is in scope."
   },
   {
+    "query": "Before backing up Thoth, ask me what you need to know about my setup.",
+    "should_trigger": true,
+    "reason": "The skill should run its minimum viable preflight for a Thoth backup."
+  },
+  {
+    "query": "I modified Thoth's memory backend; can I still use the standard GitHub backup workflow?",
+    "should_trigger": true,
+    "reason": "Custom memory storage is a compatibility risk handled by the skill."
+  },
+  {
+    "query": "I want a plaintext archive of my Thoth memory in GitHub because encryption is annoying.",
+    "should_trigger": true,
+    "reason": "Plaintext Thoth backup requests require explicit risk handling."
+  },
+  {
+    "query": "Should this be a memory-only Thoth backup or a full continuity backup for future agents?",
+    "should_trigger": true,
+    "reason": "Choosing a Thoth backup profile is part of the workflow."
+  },
+  {
+    "query": "I do not have GitHub set up yet, but I want a private repo backup for Thoth memory.",
+    "should_trigger": true,
+    "reason": "GitHub readiness and beginner setup are prerequisites for this backup workflow."
+  },
+  {
+    "query": "Run a non-secret memory audit before building my Thoth backup script.",
+    "should_trigger": true,
+    "reason": "The skill defines safe memory audit output for backup planning."
+  },
+  {
     "query": "Explain how GitHub private repositories work.",
     "should_trigger": false,
     "reason": "Generic GitHub explanation is not Thoth backup work."
@@ -78,5 +108,10 @@
     "query": "Move my local model files to another disk.",
     "should_trigger": false,
     "reason": "Local model file management is not memory backup to GitHub."
+  },
+  {
+    "query": "How do I create a GitHub account?",
+    "should_trigger": false,
+    "reason": "Generic account setup should not trigger unless tied to Thoth backup readiness."
   }
 ]
